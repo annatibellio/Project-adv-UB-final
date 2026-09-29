@@ -7,32 +7,8 @@ botaoLogin.addEventListener("click", async function () {
     const senha = document.getElementById("senha").value;
 
 
-    // VALIDAÇÃO DE E-MAIL
-    const emailValido =
-        email.includes("@gmail.com") ||
-        email.includes("@hotmail.com") ||
-        email.includes("@outlook.com") ||
-        email.includes("@yahoo.com") ||
-        email.includes("@icloud.com") ||
-        email.includes("@live.com") ||
-        email.includes("@msn.com") ||
-        email.includes("@uol.com.br") ||
-        email.includes("@bol.com.br") ||
-        email.includes("@terra.com.br") ||
-        email.includes("@globo.com") ||
-        email.includes("@ig.com.br") ||
-        email.includes("@r7.com") ||
-        email.includes("@protonmail.com") ||
-        email.includes("@aol.com") ||
-        email.includes("@mail.com") ||
-        email.includes("@gmx.com") ||
-        email.includes("@zoho.com") ||
-        email.includes("@edu.br") ||
-        email.includes("@gov.br") ||
-        email.includes("@jus.br") ||
-        email.includes("@org.br") ||
-        email.includes("@com.br");
-    // const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    // VALIDAÇÃO DE E-MAIL (formato genérico: qualquer domínio válido)
+    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
     // CAMPOS VAZIOS
 
@@ -64,7 +40,7 @@ botaoLogin.addEventListener("click", async function () {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "same-origin",
-                body: JSON.stringify({ email, senha }),
+                body: JSON.stringify({ email: email.trim(), senha }),
             });
 
             const dados = await resposta.json();

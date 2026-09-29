@@ -6,6 +6,17 @@
 
 USE `advub`;
 
+-- Limpa os dados antigos para o script poder ser executado mais de uma vez
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE `movimentacoes`;
+TRUNCATE TABLE `documentos_processo`;
+TRUNCATE TABLE `documentos`;
+TRUNCATE TABLE `audiencias`;
+TRUNCATE TABLE `compromissos`;
+TRUNCATE TABLE `processos`;
+TRUNCATE TABLE `usuarios`;
+SET FOREIGN_KEY_CHECKS = 1;
+
 -- ------------------------------------------------------------
 -- USUÁRIO PADRÃO PARA LOGIN DE TESTES
 -- e-mail: admin@advub.com.br
