@@ -1,0 +1,306 @@
+* {
+  box-sizing: border-box;
+}
+
+.main-content {
+  min-width: 0;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.header-titles h1 {
+  font-size: 24px;
+  color: #111;
+  margin-bottom: 5px;
+}
+
+.header-titles p {
+  font-size: 14px;
+  color: #666;
+}
+
+.btn-primary {
+  background: #03003b;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background: #0000ff;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #333;
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  height: 40px;
+}
+
+.btn-secondary:hover {
+  background: #f4f4f4;
+}
+
+.agenda-container {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 30px;
+  align-items: start;
+}
+
+.calendar-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.agenda-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.sidebar-section h3 {
+  font-size: 16px;
+  color: #111;
+  margin-bottom: 15px;
+}
+
+.prazo-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #ddd;
+}
+
+.prazo-card.border-red {
+  border-left-color: #ef4444;
+}
+
+.prazo-card.border-blue {
+  border-left-color: #3b82f6;
+}
+
+.prazo-card.border-green {
+  border-left-color: #22c55e;
+}
+
+.prazo-card h4 {
+  font-size: 14px;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+
+.prazo-card p {
+  font-size: 12px;
+  color: #777;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.prazo-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.text-red {
+  color: #ef4444;
+}
+
+.text-orange {
+  color: #f59e0b;
+}
+
+.text-green {
+  color: #22c55e;
+}
+
+.link-todos {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.link-todos:hover {
+  text-decoration: underline;
+}
+
+.alert-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.alert-warning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.alert-warning i {
+  color: #f59e0b;
+  font-size: 24px;
+}
+
+.alert-danger {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.alert-danger i {
+  color: #ef4444;
+  font-size: 24px;
+}
+
+.alert-card strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.alert-card a {
+  font-size: 12px;
+  color: inherit;
+  text-decoration: underline;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(2px);
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #0d1130;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s;
+}
+
+.btn-close:hover {
+  color: #ff4d4d;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #0d1130;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1100px) {
+  .agenda-container {
+    grid-template-columns: 1fr;
+  }
+}

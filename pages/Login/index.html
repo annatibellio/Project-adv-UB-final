@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Sistema de Gestão de Processos Jurídicos" />
+    <meta name="keywords" content="ADV UB, jurídico, processos, login" />
+    <meta name="author" content="Grupo ADV UB" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Juris Gestor</title>
+
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+    <main class="login-page">
+        <!-- LADO ESQUERDO -->
+        <section class="login-banner">
+            <h1>JURIS GESTOR</h1>
+            <p>
+                Sistema de Gestão de Processos Jurídicos
+            </p>
+        </section>
+        <!-- LADO DIREITO -->
+        <section class="login-form">
+            <form>
+                <h2>Bem-vindo(a) de volta!</h2>
+                <p>
+                    Faça login para acessar sua conta
+                </p>
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="Digite seu e-mail" />
+                <label for="senha">Senha</label>
+                <div class="password-box">
+                    <input type="password" id="senha" name="senha" placeholder="Digite sua senha" />
+
+                    <span id="toggleSenha" class="eye-icon">
+                        👁
+                    </span>
+                </div>
+                <a href="https://n8n-production-1d70.up.railway.app/webhook/confirme-seu-email">
+                    Esqueci minha senha
+                </a>
+                <!-- BOTÃO ENTRAR -->
+                <button type="button" id="btn-login">
+                    Entrar
+                </button>
+                </a>
+            </form>
+        </section>
+    </main>
+    <script src="./login.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,364 @@
+#btn-novo-documento {
+    background-color: #1e293b;
+    color: #fff;
+    width: 150px;
+    height: 50px;
+    position: absolute;
+    top: 65px;
+    right: 30px;
+    border-style: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.filtros {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.filtros > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 200px;
+}
+
+.filtros label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+#busca,
+#filtro-tipo {
+  background-color: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  height: 50px;
+  padding: 0 12px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#busca:focus,
+#filtro-tipo:focus {
+  outline: 2px solid #1e293b;
+}
+
+.filtros-limpar {
+  display: flex;
+  align-items: flex-end;
+  flex: 0 !important;
+  min-width: unset !important;
+}
+
+#btn-limpar-filtros {
+  display: none;
+  background-color: #fff;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  height: 50px;
+  padding: 0 16px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#btn-limpar-filtros:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+.tabela-wrapper {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 350px);
+}
+
+.tabela-wrapper h2 {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 2;
+  padding-bottom: 16px;
+  margin: 0;
+}
+
+thead th {
+  position: sticky;
+  top: 49px;
+  background-color: #fff;
+  z-index: 1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid #e2e8f0;
+  font-size: 14px;
+  color: #475569;
+  user-select: none;
+}
+
+th.ordenado-asc::after  { content: ' ▲'; font-size: 11px; }
+th.ordenado-desc::after { content: ' ▼'; font-size: 11px; }
+
+td {
+  padding: 14px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+}
+
+.msg-vazio {
+  text-align: center;
+  color: #94a3b8;
+  padding: 32px 14px;
+  font-size: 14px;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.badge.enviado {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.badge.pendente {
+  background-color: #fef9c3;
+  color: #ca8a04;
+}
+
+.btn-visualizar {
+  background-color: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-visualizar:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+}
+
+body {
+  overflow: hidden;
+}
+
+.content {
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* ── TOAST ───────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  padding: 14px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+}
+
+.toast--visivel {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toast--sucesso {
+  background-color: #1e293b;
+  color: #fff;
+}
+
+.toast--erro {
+  background-color: #dc2626;
+  color: #fff;
+}
+
+/* ── MODAIS ──────────────────────────────────────────────── */
+#modal-novo-documento,
+#modal-visualizar {
+  width: 50%;
+  min-width: 320px;
+  border-radius: 10px;
+  border: none;
+  padding: 0;
+}
+
+#modal-novo-documento::backdrop,
+#modal-visualizar::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px 16px 28px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #1e293b;
+}
+
+#fechar-modal-novo-documento,
+#fechar-modal-visualizar {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #475569;
+  line-height: 1;
+  padding: 4px 8px;
+}
+
+#fechar-modal-novo-documento:hover,
+#fechar-modal-visualizar:hover {
+  color: #1e293b;
+}
+
+.modal-body {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal-campo label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.modal-campo p {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.modal-campo a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+#modal-nome,
+#modal-tipo,
+#modal-processo-relacionado,
+#modal-arquivo {
+  background-color: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  height: 44px;
+  padding: 0 12px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#modal-arquivo {
+  height: auto;
+  padding: 10px 12px;
+}
+
+#modal-nome:focus,
+#modal-tipo:focus,
+#modal-processo-relacionado:focus {
+  outline: 2px solid #1e293b;
+}
+
+span {
+  color: red;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 28px 24px 28px;
+  border-top: 1px solid #e2e8f0;
+}
+
+#cancelar-modal-novo-documento,
+#fechar-modal-visualizar-btn {
+  background-color: #fff;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#cancelar-modal-novo-documento:hover,
+#fechar-modal-visualizar-btn:hover {
+  background-color: #f1f5f9;
+}
+
+#salvar-modal-novo-documento {
+  background-color: #1e293b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#salvar-modal-novo-documento:hover {
+  background-color: #334155;
+}
+
+.btn-excluir {
+  background-color: #fff;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: auto;
+}
+
+.btn-excluir:hover {
+  background-color: #fef2f2;
+}

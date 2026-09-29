@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Tela do status de audiências do usuário advogado" />
+    <title>Audiências | Projeto ADV UB</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/global.css" />
+    <link rel="stylesheet" href="../../Components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="audiencias.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <app-sidebar current="audiencias" root-prefix="../../"></app-sidebar>
+
+      <main class="content">
+        <section class="main-content">
+          <header class="page-header">
+            <div class="header-titles">
+              <h1>Audiências</h1>
+              <p>Acompanhe seus prazos, compromissos e audiências agendadas.</p>
+            </div>
+            <div class="header-actions" style="display: flex; gap: 1rem">
+              <a
+                href="../../pages/agenda/index.html"
+                class="btn-secondary"
+                style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem"
+              >
+                <i class="bx bx-calendar"></i> Agenda
+              </a>
+
+              <button class="btn-primary" onclick="abrirModal('modalNovoProcesso')">
+                <i class="bx bx-plus"></i> Nova audiência
+              </button>
+            </div>
+          </header>
+
+          <div class="filters-container">
+            <div class="filter-group">
+              <label>Data da audiência</label>
+              <div class="date-picker">
+                <input type="date" id="filtroDataInicial" placeholder="Data inicial" />
+                <span>até</span>
+                <input type="date" id="filtroDataFinal" placeholder="Data final" />
+                <i class="bx bx-calendar"></i>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <label>Status</label>
+              <select id="filtroStatus">
+                <option value="">Todos</option>
+                <option value="Agendada">Agendada</option>
+                <option value="Confirmada">Confirmada</option>
+                <option value="Realizada">Realizada</option>
+                <option value="Cancelada">Cancelada</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Vara / Instância</label>
+              <input type="text" id="filtroVara" placeholder="Ex: 3ª Vara Cível" />
+            </div>
+
+            <button class="btn-secondary" id="btnLimparFiltrosAudiencia">
+              <i class="bx bx-refresh"></i> Limpar filtros
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Data / Hora</th>
+                  <th>Processo</th>
+                  <th>Parte adversa</th>
+                  <th>Vara / Instância</th>
+                  <th>Tipo</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaAudiencias">
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-overlay" id="modalNovoProcesso">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Nova Audiência</h2>
+          <button class="btn-close" onclick="fecharModal('modalNovoProcesso')">
+            <i class="bx bx-x"></i>
+          </button>
+        </div>
+
+        <form id="formNovaAudiencia">
+          <div class="form-group">
+            <label>Número do Processo</label>
+            <input type="text" id="audNumeroProcesso" placeholder="0000000-00.0000.0.00.0000" />
+          </div>
+
+          <div class="form-group">
+            <label>Parte Adversa / Cliente</label>
+            <input type="text" id="audParteAdversa" placeholder="Nome da parte envolvida" />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+            <div class="form-group">
+              <label>Vara / Instância</label>
+              <input type="text" id="audVara" placeholder="Ex: 3ª Vara Cível" />
+            </div>
+            <div class="form-group">
+              <label>Status inicial</label>
+              <select id="audStatus">
+                <option value="Agendada">Agendada</option>
+                <option value="Confirmada">Confirmada</option>
+                <option value="Realizada">Realizada</option>
+                <option value="Cancelada">Cancelada</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+            <div class="form-group">
+              <label>Data</label>
+              <input type="date" id="audData" />
+            </div>
+            <div class="form-group">
+              <label>Hora</label>
+              <input type="time" id="audHora" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de audiência</label>
+            <input type="text" id="audTipo" placeholder="Ex: Audiência de Conciliação" />
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary" onclick="fecharModal('modalNovoProcesso')">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-primary">Cadastrar audiência</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="../../Components/auth-guard.js"></script>
+    <script src="../../Components/sidebar/sidebar.js"></script>
+    <script src="audiencias.js"></script>
+  </body>
+</html>

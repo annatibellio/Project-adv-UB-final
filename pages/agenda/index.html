@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Tela de agenda dos compromissos marcados do usuário advogado"
+    />
+    <title>Agenda | Projeto ADV UB</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/global.css" />
+    <link rel="stylesheet" href="../../Components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="agenda.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <app-sidebar current="agenda" root-prefix="../../"></app-sidebar>
+
+      <main class="content">
+        <section class="main-content">
+          <header class="page-header">
+            <div class="header-titles">
+              <h1>Agenda</h1>
+              <p>Prazos, audiências e compromissos</p>
+            </div>
+            <div class="header-actions" style="display: flex; flex-direction: column; gap: 0.5rem">
+              <button class="btn-primary" onclick="abrirModal('modalNovoCompromisso')">
+                <i class="bx bx-plus"></i> Novo compromisso
+              </button>
+
+              <a
+                href="../../pages/audiencias/index.html"
+                class="btn-secondary"
+                style="
+                  text-decoration: none;
+                  display: flex;
+                  align-items: center;
+                  width: 100%;
+                  box-sizing: border-box;
+                "
+              >
+                <i class="bx bx-group" style="width: 24px; text-align: left"></i>
+                <span style="flex: 1; text-align: center">Audiências</span>
+                <div style="width: 24px"></div>
+              </a>
+            </div>
+          </header>
+
+          <div class="agenda-container">
+            <div class="calendar-wrapper">
+              <div id="calendar"></div>
+            </div>
+
+            <aside class="agenda-sidebar">
+              <div class="sidebar-section">
+                <h3>Próximos prazos</h3>
+
+                <div id="listaPrazos">
+                <div class="prazo-card border-red">
+                  <h4>Contestação</h4>
+                  <p>0012345-67.2024.8.26.0100</p>
+                  <div class="prazo-footer">
+                    <span>Vence: 05/05/2026</span>
+                    <span class="text-red">2 dias</span>
+                  </div>
+                </div>
+
+                <div class="prazo-card border-blue">
+                  <h4>Recurso</h4>
+                  <p>0034567-89.2024.8.26.0100</p>
+                  <div class="prazo-footer">
+                    <span>Vence: 08/05/2026</span>
+                    <span class="text-orange">5 dias</span>
+                  </div>
+                </div>
+
+                <div class="prazo-card border-green">
+                  <h4>Manifestação</h4>
+                  <p>0045678-90.2024.8.26.0100</p>
+                  <div class="prazo-footer">
+                    <span>Vence: 13/05/2026</span>
+                    <span class="text-green">10 dias</span>
+                  </div>
+                </div>
+                </div>
+
+                <a href="#" class="link-todos">Ver todos os prazos</a>
+              </div>
+
+              <div class="sidebar-section">
+                <h3>Alertas</h3>
+
+                <div class="alert-card alert-warning">
+                  <i class="bx bx-error"></i>
+                  <div>
+                    <strong>3 intimações não lidas</strong>
+                    <a href="#">Ver intimações</a>
+                  </div>
+                </div>
+
+                <div class="alert-card alert-danger">
+                  <i class="bx bx-stopwatch"></i>
+                  <div>
+                    <strong>1 tarefa atrasada</strong>
+                    <a href="#">Ver tarefas</a>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-overlay" id="modalNovoCompromisso">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Novo compromisso</h2>
+          <button class="btn-close" onclick="fecharModal('modalNovoCompromisso')">
+            <i class="bx bx-x"></i>
+          </button>
+        </div>
+
+        <form id="formNovoCompromisso">
+          <div class="form-group">
+            <label>Título do compromisso</label>
+            <input type="text" id="compTitulo" placeholder="Ex: Reunião com cliente" />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+            <div class="form-group">
+              <label>Data</label>
+              <input type="date" id="compData" />
+            </div>
+            <div class="form-group">
+              <label>Hora</label>
+              <input type="time" id="compHora" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo</label>
+            <select id="compTipo">
+              <option>Prazo Processual</option>
+              <option>Reunião</option>
+              <option>Audiência</option>
+              <option>Outros</option>
+            </select>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary" onclick="fecharModal('modalNovoCompromisso')">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-primary">Salvar compromisso</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <script src="../../Components/auth-guard.js"></script>
+    <script src="../../Components/sidebar/sidebar.js"></script>
+    <script src="agenda.js"></script>
+  </body>
+</html>

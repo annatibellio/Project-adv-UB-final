@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentos | Juris Gestor</title>
+    <link rel="stylesheet" href="../../Components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../../assets/global.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <app-sidebar current="projetos" root-prefix="../../"></app-sidebar>
+
+      <main class="content">
+
+        <!-- TOAST -->
+        <div id="toast" class="toast"></div>
+
+        <div class="cabecalho">
+          <h1>Documentos</h1>
+          <p>Organize os documentos vinculados aos processos.</p>
+          <button id="btn-novo-documento">+ Novo documento</button>
+
+          <!-- MODAL NOVO DOCUMENTO -->
+          <dialog id="modal-novo-documento">
+            <div class="modal-header">
+              <h2>Novo documento</h2>
+              <button id="fechar-modal-novo-documento">&#x2715;</button>
+            </div>
+
+            <div class="modal-body">
+              <div class="modal-campo">
+                <label for="modal-nome">Nome do documento <span>*</span></label>
+                <input type="text" id="modal-nome" placeholder="Digite o nome do documento" />
+              </div>
+
+              <div class="modal-campo">
+                <label for="modal-tipo">Tipo <span>*</span></label>
+                <select id="modal-tipo">
+                  <option value="" disabled selected>Selecione o tipo de documento</option>
+                  <option value="Procuração">Procuração</option>
+                  <option value="Contrato">Contrato</option>
+                  <option value="Comprovante">Comprovante</option>
+                  <option value="Petição">Petição</option>
+                </select>
+              </div>
+
+              <div class="modal-campo">
+                <label for="modal-processo-relacionado">Processo relacionado (opcional)</label>
+                <select id="modal-processo-relacionado">
+                  <option value="">Nenhum</option>
+                  <option value="0098765-12.2024.8.26.0000">0098765-12.2024.8.26.0000</option>
+                  <option value="0011223-34.2024.8.26.0000">0011223-34.2024.8.26.0000</option>
+                  <option value="0044556-67.2024.8.26.0000">0044556-67.2024.8.26.0000</option>
+                  <option value="0077889-90.2024.8.26.0000">0077889-90.2024.8.26.0000</option>
+                  <option value="0033221-10.2024.8.26.0000">0033221-10.2024.8.26.0000</option>
+                </select>
+              </div>
+
+              <div class="modal-campo">
+                <label for="modal-arquivo">Anexar arquivo <span>*</span></label>
+                <input type="file" id="modal-arquivo" accept=".pdf,.doc,.docx,.png,.jpg" />
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button id="cancelar-modal-novo-documento">Cancelar</button>
+              <button id="salvar-modal-novo-documento">Salvar</button>
+            </div>
+          </dialog>
+
+          <!-- MODAL VISUALIZAR -->
+          <dialog id="modal-visualizar">
+            <div class="modal-header">
+              <h2>Detalhes do documento</h2>
+              <button id="fechar-modal-visualizar">&#x2715;</button>
+            </div>
+
+            <div class="modal-body">
+              <div class="modal-campo">
+                <label>Nome do documento</label>
+                <p id="visualizar-nome"></p>
+              </div>
+              <div class="modal-campo">
+                <label>Tipo</label>
+                <p id="visualizar-tipo"></p>
+              </div>
+              <div class="modal-campo">
+                <label>Número do processo</label>
+                <p id="visualizar-processo"></p>
+              </div>
+              <div class="modal-campo" id="campo-processo-relacionado">
+                <label>Processo relacionado</label>
+                <p id="visualizar-processo-relacionado"></p>
+              </div>
+              <div class="modal-campo">
+                <label>Data de envio</label>
+                <p id="visualizar-data"></p>
+              </div>
+              <div class="modal-campo">
+                <label>Status</label>
+                <p id="visualizar-status"></p>
+              </div>
+              <div class="modal-campo">
+                <label>Arquivo anexado</label>
+                <p id="visualizar-arquivo"></p>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button id="excluir-documento" class="btn-excluir">Excluir</button>
+              <button id="fechar-modal-visualizar-btn">Fechar</button>
+            </div>
+          </dialog>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="filtros">
+          <div>
+            <label for="busca">Buscar Documento</label>
+            <input
+              type="search"
+              id="busca"
+              placeholder="🔎  Digite o nome do documento ou número do processo..."
+            />
+          </div>
+          <div>
+            <label for="filtro-tipo">Tipo</label>
+            <select id="filtro-tipo">
+              <option value="">Todos</option>
+              <option value="Procuração">Procuração</option>
+              <option value="Contrato">Contrato</option>
+              <option value="Comprovante">Comprovante</option>
+              <option value="Petição">Petição</option>
+            </select>
+          </div>
+          <div class="filtros-limpar">
+            <button id="btn-limpar-filtros">&#x2715; Limpar filtros</button>
+          </div>
+        </div>
+
+        <!-- TABELA -->
+        <div class="tabela-wrapper">
+          <h2>Documentos cadastrados</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Documento</th>
+                <th>Tipo</th>
+                <th>Processo</th>
+                <th>Data de envio</th>
+                <th>Status</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela">
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <script src="../../Components/auth-guard.js"></script>
+    <script src="../../Components/sidebar/sidebar.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

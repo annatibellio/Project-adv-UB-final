@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | Projeto ADV UB</title>
+    <link rel="stylesheet" href="../../assets/global.css" />
+    <link rel="stylesheet" href="../../Components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <app-sidebar current="dashboard" root-prefix="../../"></app-sidebar>
+
+      <main class="content">
+        <section class="dashboard">
+          <header class="dashboard__header">
+            <h1 class="dashboard__title">Dashboard</h1>
+            <p class="dashboard__subtitle">Visão geral do escritório — processos, prazos, audiências e tarefas em tempo real.</p>
+          </header>
+
+          <div class="kpi-carousel">
+            <div class="kpi-carousel__viewport">
+              <div class="dashboard__kpi-grid kpi-carousel__track" id="kpiCarouselTrack">
+            <article class="kpi-card kpi-card--cyan">
+              <div class="kpi-card__icon" aria-hidden="true">⚖</div>
+              <p class="kpi-card__label">Processos ativos</p>
+              <p class="kpi-card__value">24</p>
+              <p class="kpi-card__hint">+3 este mês</p>
+            </article>
+
+            <article class="kpi-card kpi-card--amber">
+              <div class="kpi-card__icon" aria-hidden="true">⏱</div>
+              <p class="kpi-card__label">Prazos próximos</p>
+              <p class="kpi-card__value">5</p>
+              <p class="kpi-card__hint">Nos próximos 7 dias</p> 
+            </article>
+
+            <article class="kpi-card kpi-card--purple">
+              <div class="kpi-card__icon" aria-hidden="true">🎙</div>
+              <p class="kpi-card__label">Audiências hoje</p>
+              <p class="kpi-card__value">2</p>
+              <p class="kpi-card__hint">14h e 16h</p>
+            </article>
+
+            <article class="kpi-card kpi-card--rose">
+              <div class="kpi-card__icon" aria-hidden="true">✓</div>
+              <p class="kpi-card__label">Tarefas pendentes</p>
+              <p class="kpi-card__value">12</p>
+              <p class="kpi-card__hint">4 com prioridade alta</p>
+            </article>
+              </div>
+            </div>
+
+            <div class="kpi-carousel__nav" aria-label="Navegação dos indicadores">
+              <button
+                type="button"
+                class="kpi-carousel__arrow kpi-carousel__arrow--prev"
+                aria-label="Indicador anterior"
+                disabled
+              >
+                <span aria-hidden="true">&#8249;</span>
+              </button>
+              <div class="kpi-carousel__bullets" id="kpiCarouselBullets"></div>
+              <button
+                type="button"
+                class="kpi-carousel__arrow kpi-carousel__arrow--next"
+                aria-label="Próximo indicador"
+              >
+                <span aria-hidden="true">&#8250;</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="dashboard__panels">
+            <article class="panel panel--chart">
+              <h2 class="panel__title">Distribuição de processos</h2>
+              <div class="chart-wrap">
+                <canvas id="processChart" aria-label="Gráfico circular de processos"></canvas>
+                <div class="chart-center" aria-hidden="true">
+                  <span class="chart-center__value" id="chartTotal">24</span>
+                  <span class="chart-center__label">processos</span>
+                </div>
+              </div>
+              <ul class="chart-legend" id="chartLegend"></ul>
+            </article>
+
+            <article class="panel">
+              <h2 class="panel__title">Informações recentes</h2>
+              <ul class="feed-list">
+                <li class="feed-item">
+                  <div class="feed-item__meta">
+                    <span class="feed-item__tag feed-item__tag--processo">Processo</span>
+                    <time class="feed-item__time">Há 12 min</time>
+                  </div>
+                  <p class="feed-item__text">
+                    Petição inicial protocolada — Proc. 2024.1847 (Silva x Comércio Ltda).
+                  </p>
+                </li>
+                <li class="feed-item">
+                  <div class="feed-item__meta">
+                    <span class="feed-item__tag feed-item__tag--audiencia">Audiência</span>
+                    <time class="feed-item__time">Há 1 h</time>
+                  </div>
+                  <p class="feed-item__text">
+                    Audiência de conciliação confirmada para hoje às 14h — 3ª Vara Cível.
+                  </p>
+                </li>
+                <li class="feed-item">
+                  <div class="feed-item__meta">
+                    <span class="feed-item__tag feed-item__tag--tarefa">Tarefa</span>
+                    <time class="feed-item__time">Há 3 h</time>
+                  </div>
+                  <p class="feed-item__text">
+                    Revisão de contrato concluída — cliente Mendes enviado para assinatura.
+                  </p>
+                </li>
+                <li class="feed-item">
+                  <div class="feed-item__meta">
+                    <span class="feed-item__tag feed-item__tag--prazo">Prazo</span>
+                    <time class="feed-item__time">Ontem</time>
+                  </div>
+                  <p class="feed-item__text">
+                    Contestação registrada no sistema — prazo fatal em 04/06.
+                  </p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="panel">
+              <h2 class="panel__title">Prazos próximos</h2>
+              <ul class="deadline-list">
+                <li class="deadline-item deadline-item--urgent">
+                  <div class="deadline-item__days"><span>2</span>dias</div>
+                  <div class="deadline-item__info">
+                    <strong>Contestação — Proc. 2023.902</strong>
+                    <small>Trabalhista · Vara do Trabalho</small>
+                  </div>
+                  <time class="deadline-item__date">04/06</time>
+                </li>
+                <li class="deadline-item deadline-item--urgent">
+                  <div class="deadline-item__days"><span>3</span>dias</div>
+                  <div class="deadline-item__info">
+                    <strong>Recurso ordinário</strong>
+                    <small>Cível · 2ª instância</small>
+                  </div>
+                  <time class="deadline-item__date">05/06</time>
+                </li>
+                <li class="deadline-item deadline-item--warning">
+                  <div class="deadline-item__days"><span>5</span>dias</div>
+                  <div class="deadline-item__info">
+                    <strong>Manifestação sobre laudo</strong>
+                    <small>Família · 1ª Vara</small>
+                  </div>
+                  <time class="deadline-item__date">07/06</time>
+                </li>
+                <li class="deadline-item deadline-item--warning">
+                  <div class="deadline-item__days"><span>6</span>dias</div>
+                  <div class="deadline-item__info">
+                    <strong>Impugnação ao cumprimento</strong>
+                    <small>Execução · TJ</small>
+                  </div>
+                  <time class="deadline-item__date">08/06</time>
+                </li>
+                <li class="deadline-item deadline-item--normal">
+                  <div class="deadline-item__days"><span>7</span>dias</div>
+                  <div class="deadline-item__info">
+                    <strong>Embargos de declaração</strong>
+                    <small>Consumidor · JEC</small>
+                  </div>
+                  <time class="deadline-item__date">09/06</time>
+                </li>
+              </ul>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../../Components/auth-guard.js"></script>
+    <script src="../../Components/sidebar/sidebar.js"></script>
+    <script src="dashboard.js"></script>
+  </body>
+</html>

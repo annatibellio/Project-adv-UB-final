@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Processos | Projeto ADV UB</title>
+    <link rel="stylesheet" href="../../assets/global.css" />
+    <link rel="stylesheet" href="../../Components/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="./processos.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <app-sidebar current="processos" root-prefix="../../"></app-sidebar>
+
+      <main class="content">
+
+        
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Processos</h1>
+            <p class="page-subtitle">Consulte e gerencie os processos do escritório</p>
+          </div>
+          <button class="btn-primary" id="btnNovoProcesso">
+            + Novo Processo
+          </button>
+        </div>
+
+        
+        <div class="search-card">
+          <div class="search-grid">
+            <div class="search-field">
+              <label>Número do Processo</label>
+              <input type="text" id="filtroNumero" placeholder="Ex: 0012345-67.2024.8.26.0100" />
+            </div>
+            <div class="search-field">
+              <label>Nome do Cliente</label>
+              <input type="text" id="filtroCliente" placeholder="Digite o nome do cliente" />
+            </div>
+            <div class="search-field">
+              <label>CPF/CNPJ do Cliente</label>
+              <input type="text" id="filtroCpf" placeholder="000.000.000-00" />
+            </div>
+            <div class="search-field">
+              <label>Área</label>
+              <select id="filtroArea">
+                <option value="">Todas as áreas</option>
+                <option value="Cível">Cível</option>
+                <option value="Trabalhista">Trabalhista</option>
+                <option value="Criminal">Criminal</option>
+                <option value="Tributário">Tributário</option>
+                <option value="Família">Família</option>
+                <option value="Previdenciário">Previdenciário</option>
+              </select>
+            </div>
+            <div class="search-field">
+              <label>Situação</label>
+              <select id="filtroSituacao">
+                <option value="">Todas as situações</option>
+                <option value="Em andamento">Em andamento</option>
+                <option value="Aguardando">Aguardando</option>
+                <option value="Suspenso">Suspenso</option>
+                <option value="Concluso">Concluso</option>
+                <option value="Arquivado">Arquivado</option>
+              </select>
+            </div>
+          </div>
+          <div class="search-actions">
+            <button class="btn-secondary" id="btnLimpar">Limpar Filtros</button>
+            <button class="btn-primary" id="btnPesquisar">Pesquisar</button>
+          </div>
+        </div>
+
+       
+        <div class="results-card">
+          <div class="results-header">
+            <span class="results-count" id="resultsCount">Mostrando 1 a 5 de 5 resultados</span>
+          </div>
+          <table class="processos-table">
+            <thead>
+              <tr>
+                <th>Processo</th>
+                <th>Cliente</th>
+                <th>Área</th>
+                <th>Situação</th>
+                <th>Última Atualização</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaProcessos">
+              
+            </tbody>
+          </table>
+
+          
+          <div class="pagination" id="paginacao">
+            
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+ 
+    <div class="modal-overlay" id="modalNovoProcesso">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Cadastrar Novo Processo</h2>
+          <button class="modal-close" id="btnFecharModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <label>Número do Processo *</label>
+              <input type="text" id="novoNumero" placeholder="0000000-00.0000.0.00.0000" />
+            </div>
+            <div class="form-field">
+              <label>Cliente *</label>
+              <input type="text" id="novoCliente" placeholder="Nome completo do cliente" />
+            </div>
+            <div class="form-field">
+              <label>CPF/CNPJ do Cliente *</label>
+              <input type="text" id="novoCpf" placeholder="000.000.000-00" />
+            </div>
+            <div class="form-field">
+              <label>Área *</label>
+              <select id="novaArea">
+                <option value="">Selecione a área</option>
+                <option value="Cível">Cível</option>
+                <option value="Trabalhista">Trabalhista</option>
+                <option value="Criminal">Criminal</option>
+                <option value="Tributário">Tributário</option>
+                <option value="Família">Família</option>
+                <option value="Previdenciário">Previdenciário</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Vara / Órgão *</label>
+              <input type="text" id="novaVara" placeholder="Ex: TJSP - 3ª Vara Cível" />
+            </div>
+            <div class="form-field">
+              <label>Advogado Responsável *</label>
+              <input type="text" id="novoAdvogado" placeholder="Nome do advogado" />
+            </div>
+            <div class="form-field">
+              <label>Data de Abertura *</label>
+              <input type="date" id="novaData" />
+            </div>
+            <div class="form-field">
+              <label>Situação *</label>
+              <select id="novaSituacao">
+                <option value="">Selecione a situação</option>
+                <option value="Em andamento">Em andamento</option>
+                <option value="Aguardando">Aguardando</option>
+                <option value="Suspenso">Suspenso</option>
+                <option value="Concluso">Concluso</option>
+                <option value="Arquivado">Arquivado</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="btnCancelarModal">Cancelar</button>
+          <button class="btn-primary" id="btnSalvarProcesso">Salvar Processo</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal-overlay" id="modalDetalhes">
+      <div class="modal modal-large">
+        <div class="modal-header">
+          <h2 id="detalhesTitulo">Detalhes do Processo</h2>
+          <div class="modal-header-actions">
+            <button class="btn-icon-accent" id="btnAbrirEdicao" title="Editar processo">Editar</button>
+            <button class="modal-close" id="btnFecharDetalhes">&times;</button>
+          </div>
+        </div>
+        <div class="modal-body">
+
+          
+          <div class="detalhes-grid" id="detalhesGrid">
+            
+          </div>
+
+         
+          <div class="secao-titulo">
+            <h3>Movimentações</h3>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <button class="btn-link" id="btnVerTodasMovimentacoes">Ver todas</button>
+              <button class="btn-link" id="btnNovaMovimentacao">+ Nova Movimentação</button>
+            </div>
+          </div>
+          <table class="processos-table" id="tabelaMovimentacoes">
+            <thead>
+              <tr>
+                <th>Data / Hora</th>
+                <th>Descrição</th>
+                <th>Responsável</th>
+                <th>Cargo</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="movimentacoesBody">
+              
+            </tbody>
+          </table>
+
+          
+          <div class="secao-titulo">
+            <h3>Documentos</h3>
+            <button class="btn-link" id="btnAnexarDocumento">+ Anexar documento</button>
+            <input type="file" id="inputAnexarDocumento" style="display:none" />
+          </div>
+          <div class="documentos-lista" id="documentosLista">
+           
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="btnFecharDetalhes2">Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="modal-overlay" id="modalEditar">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Editar Processo</h2>
+          <button class="modal-close" id="btnFecharEdicao">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editarId" />
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <label>Número do Processo *</label>
+              <input type="text" id="editarNumero" placeholder="0000000-00.0000.0.00.0000" />
+            </div>
+            <div class="form-field">
+              <label>Cliente *</label>
+              <input type="text" id="editarCliente" placeholder="Nome completo do cliente" />
+            </div>
+            <div class="form-field">
+              <label>CPF/CNPJ do Cliente *</label>
+              <input type="text" id="editarCpf" placeholder="000.000.000-00" />
+            </div>
+            <div class="form-field">
+              <label>Área *</label>
+              <select id="editarArea">
+                <option value="">Selecione a área</option>
+                <option value="Cível">Cível</option>
+                <option value="Trabalhista">Trabalhista</option>
+                <option value="Criminal">Criminal</option>
+                <option value="Tributário">Tributário</option>
+                <option value="Família">Família</option>
+                <option value="Previdenciário">Previdenciário</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Vara / Órgão *</label>
+              <input type="text" id="editarVara" placeholder="Ex: TJSP - 3ª Vara Cível" />
+            </div>
+            <div class="form-field">
+              <label>Advogado Responsável *</label>
+              <input type="text" id="editarAdvogado" placeholder="Nome do advogado" />
+            </div>
+            <div class="form-field">
+              <label>Data de Abertura *</label>
+              <input type="date" id="editarData" />
+            </div>
+            <div class="form-field">
+              <label>Situação *</label>
+              <select id="editarSituacao">
+                <option value="">Selecione a situação</option>
+                <option value="Em andamento">Em andamento</option>
+                <option value="Aguardando">Aguardando</option>
+                <option value="Suspenso">Suspenso</option>
+                <option value="Concluso">Concluso</option>
+                <option value="Arquivado">Arquivado</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="btnCancelarEdicao">Cancelar</button>
+          <button class="btn-primary" id="btnSalvarEdicao">Salvar Alterações</button>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="modal-overlay" id="modalMovimentacao">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Nova Movimentação</h2>
+          <button class="modal-close" id="btnFecharMovimentacao">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <label>Descrição *</label>
+              <textarea id="movDescricao" placeholder="Descreva a movimentação do processo..." rows="3" style="resize:vertical;width:100%;border:1px solid var(--border);border-radius:6px;padding:8px 11px;font-size:13.5px;font-family:inherit;color:var(--text-dark);outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+            </div>
+            <div class="form-field">
+              <label>Responsável *</label>
+              <input type="text" id="movResponsavel" placeholder="Nome do responsável" />
+            </div>
+            <div class="form-field">
+              <label>Cargo do Responsável *</label>
+              <input type="text" id="movCargo" placeholder="Ex: Advogado, Juiz, Cartório..." />
+            </div>
+            <div class="form-field">
+              <label>Data *</label>
+              <input type="date" id="movData" />
+            </div>
+            <div class="form-field">
+              <label>Hora *</label>
+              <input type="time" id="movHora" />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="btnCancelarMovimentacao">Cancelar</button>
+          <button class="btn-primary" id="btnSalvarMovimentacao">Registrar Movimentação</button>
+        </div>
+      </div>
+    </div>
+
+   
+    <div class="modal-overlay" id="modalTodasMovimentacoes">
+      <div class="modal modal-large">
+        <div class="modal-header">
+          <div>
+            <h2 id="todasMovTitulo">Movimentações</h2>
+            <p id="todasMovSubtitulo" style="font-size:12px;color:var(--text-light);margin-top:2px;"></p>
+          </div>
+          <div class="modal-header-actions">
+            <button class="btn-icon-accent" id="btnExportarMovimentacoes">⬇ Exportar TXT</button>
+            <button class="modal-close" id="btnFecharTodasMov">&times;</button>
+          </div>
+        </div>
+        <div class="modal-body">
+         
+          <div style="margin-bottom:16px;">
+            <input type="text" id="buscaMovimentacoes" placeholder="🔍  Buscar nas movimentações..." style="width:100%;border:1px solid var(--border);border-radius:7px;padding:9px 13px;font-size:13.5px;color:var(--text-dark);outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" />
+          </div>
+          
+          <div class="timeline" id="timelineMovimentacoes">
+            
+          </div>
+          <div id="todasMovVazio" class="empty-state" style="display:none;"><p>Nenhuma movimentação encontrada.</p></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="btnFecharTodasMov2">Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../Components/auth-guard.js"></script>
+    <script src="../../Components/sidebar/sidebar.js"></script>
+    <script src="./processos.js"></script>
+  </body>
+</html>

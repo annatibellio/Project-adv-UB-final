@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.layout {
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+}
+
+app-sidebar {
+  display: flex;
+  align-self: stretch;
+}
+
+.content {
+  flex: 1;
+  padding: 60px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .layout .content {
+    padding-top: calc(var(--sidebar-mobile-bar, 56px) + 24px);
+  }
+}
