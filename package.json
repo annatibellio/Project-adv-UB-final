@@ -1,0 +1,10 @@
+{
+  "name": "juris-gestor-adv-ub",
+  "version": "1.0.0",
+  "description": "Sistema de gestão jurídica (PHP + MySQL + JS) - projeto acadêmico ADV UB",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": { "node": ">=18" }
+}

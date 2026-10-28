@@ -99,18 +99,18 @@ function renderTabelaAudiencias() {
           <div class="sub-text">${hora}</div>
         </td>
         <td>
-          <div class="main-text">${a.processo_numero}</div>
-          <div class="sub-text">${a.processo_desc || ""}</div>
+          <div class="main-text">${escapeHtml(a.processo_numero)}</div>
+          <div class="sub-text">${escapeHtml(a.processo_desc)}</div>
         </td>
-        <td><div class="main-text">${a.parte_adversa}</div></td>
+        <td><div class="main-text">${escapeHtml(a.parte_adversa)}</div></td>
         <td>
-          <div class="main-text">${a.vara}</div>
-          <div class="sub-text">${a.grau || ""}</div>
+          <div class="main-text">${escapeHtml(a.vara)}</div>
+          <div class="sub-text">${escapeHtml(a.grau)}</div>
         </td>
-        <td><div class="main-text">${a.tipo}</div></td>
-        <td><span class="status ${classeBadge(a.status)}">${a.status}</span></td>
+        <td><div class="main-text">${escapeHtml(a.tipo)}</div></td>
+        <td><span class="status ${classeBadge(a.status)}">${escapeHtml(a.status)}</span></td>
         <td>
-          <button class="btn-action" data-id="${a.id}" data-status="${a.status}" title="Avançar status">
+          <button class="btn-action" data-id="${a.id}" data-status="${escapeHtml(a.status)}" title="Avançar status">
             <i class="bx bx-show"></i>
           </button>
         </td>

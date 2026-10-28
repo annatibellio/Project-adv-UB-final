@@ -30,8 +30,18 @@ if ($metodo === 'GET' && isset($_GET['download'])) {
     anexarDocumento($pdo, $pastaUploads);
 } elseif ($metodo === 'DELETE') {
     $id = (int) ($_GET['id'] ?? 0);
+    if ($id <= 0) {
+        respostaJson(['sucesso' => false, 'mensagem' => 'ID inválido.'], 400);
+    }
+    $busca = $pdo->prepare('SELECT arquivo_path FROM documentos_processo WHERE id = :id');
+    $busca->execute(['id' => $id]);
+    $doc = $busca->fetch();
+    if (!$doc) {
+        respostaJson(['sucesso' => false, 'mensagem' => 'Documento não encontrado.'], 404);
+    }
     $stmt = $pdo->prepare('DELETE FROM documentos_processo WHERE id = :id');
     $stmt->execute(['id' => $id]);
+    apagarArquivoUpload($doc['arquivo_path']);
     respostaJson(['sucesso' => true, 'mensagem' => 'Documento removido.']);
 } else {
     respostaJson(['sucesso' => false, 'mensagem' => 'Método não permitido.'], 405);
@@ -40,22 +50,17 @@ if ($metodo === 'GET' && isset($_GET['download'])) {
 function anexarDocumento(PDO $pdo, string $pastaUploads): void
 {
     $processoId = (int) ($_POST['processoId'] ?? 0);
-    if ($processoId <= 0 || empty($_FILES['arquivo'])) {
+    if ($processoId <= 0) {
         respostaJson(['sucesso' => false, 'mensagem' => 'Envie o arquivo e o processo relacionado.'], 400);
     }
 
-    if (!is_dir($pastaUploads)) {
-        mkdir($pastaUploads, 0755, true);
+    $existe = $pdo->prepare('SELECT COUNT(*) FROM processos WHERE id = :id');
+    $existe->execute(['id' => $processoId]);
+    if ((int) $existe->fetchColumn() === 0) {
+        respostaJson(['sucesso' => false, 'mensagem' => 'Processo não encontrado.'], 404);
     }
 
-    $arquivo = $_FILES['arquivo'];
-    $nomeOriginal = basename($arquivo['name']);
-    $nomeArmazenado = uniqid('doc_', true) . '_' . preg_replace('/[^A-Za-z0-9._-]/', '_', $nomeOriginal);
-    $destino = $pastaUploads . $nomeArmazenado;
-
-    if (!move_uploaded_file($arquivo['tmp_name'], $destino)) {
-        respostaJson(['sucesso' => false, 'mensagem' => 'Falha ao salvar o arquivo no servidor.'], 500);
-    }
+    [$nomeOriginal, $nomeArmazenado] = salvarUpload('arquivo', $pastaUploads);
 
     $stmt = $pdo->prepare('INSERT INTO documentos_processo (processo_id, nome, arquivo_path, data)
         VALUES (:processo_id, :nome, :path, CURDATE())');
@@ -78,14 +83,5 @@ function baixarDocumento(PDO $pdo, int $id, string $pastaUploads): void
         respostaJson(['sucesso' => false, 'mensagem' => 'Documento não encontrado.'], 404);
     }
 
-    $caminhoCompleto = __DIR__ . '/../' . $doc['arquivo_path'];
-    if (!file_exists($caminhoCompleto)) {
-        respostaJson(['sucesso' => false, 'mensagem' => 'Arquivo não encontrado no servidor.'], 404);
-    }
-
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename="' . $doc['nome'] . '"');
-    header('Content-Length: ' . filesize($caminhoCompleto));
-    readfile($caminhoCompleto);
-    exit;
+    enviarDownload($doc['arquivo_path'], $doc['nome']);
 }

@@ -34,6 +34,14 @@ switch ($metodo) {
                 respostaJson(['sucesso' => false, 'mensagem' => 'Preencha todos os campos da movimentação.'], 400);
             }
         }
+        if (!dataValida($d['data']) || !horaValida($d['hora'])) {
+            respostaJson(['sucesso' => false, 'mensagem' => 'Data ou hora inválida.'], 400);
+        }
+        $existe = $pdo->prepare('SELECT COUNT(*) FROM processos WHERE id = :id');
+        $existe->execute(['id' => (int) $d['processoId']]);
+        if ((int) $existe->fetchColumn() === 0) {
+            respostaJson(['sucesso' => false, 'mensagem' => 'Processo não encontrado.'], 404);
+        }
 
         $dataHora = $d['data'] . ' ' . $d['hora'] . ':00';
 
@@ -50,7 +58,7 @@ switch ($metodo) {
         // atualiza a "última atualização" exibida na tabela de processos
         $upd = $pdo->prepare('UPDATE processos SET ultima_atualizacao = :ultima WHERE id = :id');
         $upd->execute([
-            'ultima' => (new DateTime($dataHora))->format('d/m/Y H:i'),
+            'ultima' => (new DateTime($dataHora))->format('d/m/Y, H:i'),
             'id'     => (int) $d['processoId'],
         ]);
 

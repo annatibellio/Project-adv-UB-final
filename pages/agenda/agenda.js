@@ -59,7 +59,7 @@ function renderProximosPrazos(eventos) {
 
   container.innerHTML = prazos.map((p, i) => `
     <div class="prazo-card ${cores[i % cores.length]}">
-      <h4>${p.title.replace(/^Prazo:\s*/i, "")}</h4>
+      <h4>${escapeHtml(p.title.replace(/^Prazo:\s*/i, ""))}</h4>
       <p>${p.dataEvento.toLocaleDateString("pt-BR")}</p>
       <div class="prazo-footer">
         <span>Vence: ${p.dataEvento.toLocaleDateString("pt-BR")}</span>

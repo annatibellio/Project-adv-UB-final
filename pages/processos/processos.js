@@ -111,7 +111,7 @@ function statusClass(s) {
 }
 
 function badgeHTML(situacao) {
-  return `<span class="${statusClass(situacao)}">${situacao}</span>`;
+  return `<span class="${statusClass(situacao)}">${escapeHtml(situacao)}</span>`;
 }
 
 function formatarData(dataISO) {
@@ -159,13 +159,13 @@ function renderTabela() {
     tabela.innerHTML = pagina.map(p => `
       <tr data-id="${p.id}">
         <td>
-          <div class="processo-numero">${p.numero}</div>
-          <div class="processo-tipo">${p.area}</div>
+          <div class="processo-numero">${escapeHtml(p.numero)}</div>
+          <div class="processo-tipo">${escapeHtml(p.area)}</div>
         </td>
-        <td>${p.cliente}</td>
-        <td>${p.area}</td>
+        <td>${escapeHtml(p.cliente)}</td>
+        <td>${escapeHtml(p.area)}</td>
         <td>${badgeHTML(p.situacao)}</td>
-        <td>${p.ultimaAtualizacao}</td>
+        <td>${escapeHtml(p.ultimaAtualizacao)}</td>
       </tr>
     `).join('');
 
@@ -312,16 +312,16 @@ async function abrirDetalhes(id) {
   const diasAberto = Math.floor((hoje - abertura) / (1000 * 60 * 60 * 24));
 
   const campos = [
-    { label: 'Número do Processo', valor: `<span class="numero-copiavel" data-numero="${p.numero}" title="Clique para copiar">${p.numero} <span class="copy-hint">📋</span></span>` },
-    { label: 'Cliente',            valor: p.cliente },
-    { label: 'CPF/CNPJ',                valor: p.cpf },
-    { label: 'Área',               valor: p.area },
-    { label: 'Vara / Órgão',       valor: p.vara },
-    { label: 'Advogado Responsável', valor: p.advogado },
+    { label: 'Número do Processo', valor: `<span class="numero-copiavel" data-numero="${escapeHtml(p.numero)}" title="Clique para copiar">${escapeHtml(p.numero)} <span class="copy-hint">📋</span></span>` },
+    { label: 'Cliente',            valor: escapeHtml(p.cliente) },
+    { label: 'CPF/CNPJ',                valor: escapeHtml(p.cpf) },
+    { label: 'Área',               valor: escapeHtml(p.area) },
+    { label: 'Vara / Órgão',       valor: escapeHtml(p.vara) },
+    { label: 'Advogado Responsável', valor: escapeHtml(p.advogado) },
     { label: 'Data de Abertura',   valor: formatarData(p.dataAbertura) },
-    { label: 'Situação',           valor: `<span class="${statusClass(p.situacao)}">${p.situacao}</span>` },
+    { label: 'Situação',           valor: `<span class="${statusClass(p.situacao)}">${escapeHtml(p.situacao)}</span>` },
     { label: 'Dias em Aberto',     valor: `<span class="dias-aberto">${diasAberto} dia${diasAberto !== 1 ? 's' : ''}</span>` },
-    { label: 'Última Atualização', valor: p.ultimaAtualizacao },
+    { label: 'Última Atualização', valor: escapeHtml(p.ultimaAtualizacao) },
   ];
 
   document.getElementById('detalhesGrid').innerHTML = campos.map(c => `
@@ -354,10 +354,10 @@ function renderMovimentacoes(p, limite = 3) {
   } else {
     movBody.innerHTML = lista.map((m) => `
       <tr>
-        <td style="white-space:nowrap">${m.data}</td>
-        <td>${m.descricao}</td>
-        <td>${m.responsavel}</td>
-        <td><span class="cargo-badge">${m.cargo || '—'}</span></td>
+        <td style="white-space:nowrap">${escapeHtml(m.data)}</td>
+        <td>${escapeHtml(m.descricao)}</td>
+        <td>${escapeHtml(m.responsavel)}</td>
+        <td><span class="cargo-badge">${escapeHtml(m.cargo || '—')}</span></td>
         <td>
           <button class="btn-excluir-mov" data-id="${m.id}" title="Excluir movimentação">🗑</button>
         </td>
@@ -381,9 +381,9 @@ function renderDocumentos(p) {
     docLista.innerHTML = p.documentos.map((d, idx) => `
       <div class="doc-item">
         <span class="doc-icon">📄</span>
-        <span class="doc-nome">${d.nome}</span>
-        <span class="doc-data">${d.data}</span>
-        <button class="btn-download" data-idx="${idx}" title="Baixar ${d.nome}">
+        <span class="doc-nome">${escapeHtml(d.nome)}</span>
+        <span class="doc-data">${escapeHtml(d.data)}</span>
+        <button class="btn-download" data-idx="${idx}" title="Baixar ${escapeHtml(d.nome)}">
           Download
         </button>
       </div>
@@ -664,11 +664,11 @@ function renderTimeline(movs) {
       <div class="timeline-dot"></div>
       <div class="timeline-content">
         <div class="timeline-header">
-          <span class="timeline-data">${m.data}</span>
-          <span class="cargo-badge">${m.cargo || '—'}</span>
+          <span class="timeline-data">${escapeHtml(m.data)}</span>
+          <span class="cargo-badge">${escapeHtml(m.cargo || '—')}</span>
         </div>
-        <p class="timeline-descricao">${m.descricao}</p>
-        <span class="timeline-responsavel">🧑‍⚖️ ${m.responsavel}</span>
+        <p class="timeline-descricao">${escapeHtml(m.descricao)}</p>
+        <span class="timeline-responsavel">🧑‍⚖️ ${escapeHtml(m.responsavel)}</span>
       </div>
     </div>
   `).join('');

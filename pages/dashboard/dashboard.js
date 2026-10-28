@@ -43,9 +43,9 @@ async function carregarDadosReais() {
         <li class="feed-item">
           <div class="feed-item__meta">
             <span class="feed-item__tag feed-item__tag--processo">Processo</span>
-            <time class="feed-item__time">${item.numero}</time>
+            <time class="feed-item__time">${escapeHtml(item.numero)}</time>
           </div>
-          <p class="feed-item__text">${item.descricao}</p>
+          <p class="feed-item__text">${escapeHtml(item.descricao)}</p>
         </li>`
         )
         .join("");
@@ -203,7 +203,7 @@ function setupChart() {
           `<li>
             <span class="chart-legend__label">
               <span class="chart-legend__dot" style="background:${item.color}"></span>
-              ${item.label}
+              ${escapeHtml(item.label)}
             </span>
             <span class="chart-legend__value">${item.value}</span>
           </li>`,

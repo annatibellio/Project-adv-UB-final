@@ -65,16 +65,16 @@ function renderLinhas(documentos) {
     linha.innerHTML = `
       <td
         data-id="${doc.id}"
-        data-nome="${doc.nome}"
-        data-tipo="${doc.tipo}"
-        data-processo="${doc.processo_numero}"
-        data-relacionado="${doc.processo_relacionado || ''}"
+        data-nome="${escapeHtml(doc.nome)}"
+        data-tipo="${escapeHtml(doc.tipo)}"
+        data-processo="${escapeHtml(doc.processo_numero)}"
+        data-relacionado="${escapeHtml(doc.processo_relacionado)}"
         data-data="${dataFormatada}"
         data-status="${doc.status}"
-        data-arquivo-nome="${doc.arquivo_nome}"
-      >${doc.nome}</td>
-      <td>${doc.tipo}</td>
-      <td>${doc.processo_numero}</td>
+        data-arquivo-nome="${escapeHtml(doc.arquivo_nome)}"
+      >${escapeHtml(doc.nome)}</td>
+      <td>${escapeHtml(doc.tipo)}</td>
+      <td>${escapeHtml(doc.processo_numero)}</td>
       <td>${dataFormatada}</td>
       <td><span class="badge ${statusClasse}">${statusTexto}</span></td>
       <td><button class="btn-visualizar">Visualizar</button></td>
@@ -177,7 +177,7 @@ corpoTabela.addEventListener('click', (e) => {
 
   const pArquivo = document.getElementById('visualizar-arquivo');
   if (arquivoNome) {
-    pArquivo.innerHTML = `<a href="${API_DOCUMENTOS}?download=${id}" target="_blank" rel="noopener">${arquivoNome}</a>`;
+    pArquivo.innerHTML = `<a href="${API_DOCUMENTOS}?download=${id}" target="_blank" rel="noopener">${escapeHtml(arquivoNome)}</a>`;
   } else {
     pArquivo.textContent = 'Nenhum arquivo anexado';
   }

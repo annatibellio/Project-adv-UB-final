@@ -50,13 +50,24 @@ switch ($metodo) {
             }
         }
 
+        if (!dataValida($d['data']) || (!empty($d['hora']) && !horaValida($d['hora']))) {
+            respostaJson(['sucesso' => false, 'mensagem' => 'Data ou hora inválida.'], 400);
+        }
+        if (!is_string($d['titulo']) || mb_strlen(trim($d['titulo'])) > 200) {
+            respostaJson(['sucesso' => false, 'mensagem' => 'Título inválido (máximo de 200 caracteres).'], 400);
+        }
+        $tipo = $d['tipo'] ?? 'Outros';
+        if (!isset($cores[$tipo])) {
+            $tipo = 'Outros';
+        }
+
         $stmt = $pdo->prepare('INSERT INTO compromissos (titulo, data, hora, tipo)
             VALUES (:titulo, :data, :hora, :tipo)');
         $stmt->execute([
-            'titulo' => $d['titulo'],
+            'titulo' => trim($d['titulo']),
             'data'   => $d['data'],
-            'hora'   => $d['hora'] ?? null,
-            'tipo'   => $d['tipo'] ?? 'Outros',
+            'hora'   => !empty($d['hora']) ? $d['hora'] : null,
+            'tipo'   => $tipo,
         ]);
 
         respostaJson(['sucesso' => true, 'mensagem' => 'Compromisso salvo com sucesso!', 'id' => (int) $pdo->lastInsertId()], 201);
@@ -65,6 +76,9 @@ switch ($metodo) {
     case 'DELETE':
         $stmt = $pdo->prepare('DELETE FROM compromissos WHERE id = :id');
         $stmt->execute(['id' => (int) ($_GET['id'] ?? 0)]);
+        if ($stmt->rowCount() === 0) {
+            respostaJson(['sucesso' => false, 'mensagem' => 'Compromisso não encontrado.'], 404);
+        }
         respostaJson(['sucesso' => true, 'mensagem' => 'Compromisso excluído.']);
         break;
 

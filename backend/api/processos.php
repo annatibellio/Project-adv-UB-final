@@ -15,6 +15,10 @@ require_once __DIR__ . '/../config/database.php';
 exigirLogin();
 $pdo = getConexao();
 
+// (constantes precisam ser definidas antes do switch, pois não são "içadas" como as funções)
+const CAMPOS_PROCESSO = ['numero', 'cliente', 'cpf', 'area', 'vara', 'advogado', 'dataAbertura', 'situacao'];
+const LIMITES_PROCESSO = ['numero' => 40, 'cliente' => 150, 'cpf' => 30, 'area' => 40, 'vara' => 150, 'advogado' => 150, 'situacao' => 30];
+
 $metodo = $_SERVER['REQUEST_METHOD'];
 
 switch ($metodo) {
@@ -69,16 +73,43 @@ function buscarProcesso(PDO $pdo, int $id): void
     respostaJson(['sucesso' => true, 'processo' => $processo]);
 }
 
-function criarProcesso(PDO $pdo): void
+/** Valida o corpo de criação/edição de processo; devolve os dados já limpos. */
+function validarDadosProcesso(array $d): array
 {
-    $d = lerCorpoJson();
-
-    $campos = ['numero', 'cliente', 'cpf', 'area', 'vara', 'advogado', 'dataAbertura', 'situacao'];
-    foreach ($campos as $campo) {
+    foreach (CAMPOS_PROCESSO as $campo) {
         if (empty($d[$campo])) {
             respostaJson(['sucesso' => false, 'mensagem' => 'Preencha todos os campos obrigatórios.'], 400);
         }
     }
+    foreach (LIMITES_PROCESSO as $campo => $max) {
+        $valor = textoValido($d[$campo], $max);
+        if ($valor === null) {
+            respostaJson(['sucesso' => false, 'mensagem' => "Valor inválido no campo \"$campo\" (máximo de $max caracteres)."], 400);
+        }
+        $d[$campo] = $valor;
+    }
+    if (!dataValida($d['dataAbertura'])) {
+        respostaJson(['sucesso' => false, 'mensagem' => 'Data de abertura inválida.'], 400);
+    }
+    return $d;
+}
+
+/** Executa o statement; se o número do processo já existir, responde 409. */
+function executarProcesso(PDOStatement $stmt, array $params): void
+{
+    try {
+        $stmt->execute($params);
+    } catch (PDOException $e) {
+        if ($e->getCode() === '23000') {
+            respostaJson(['sucesso' => false, 'mensagem' => 'Já existe um processo com este número.'], 409);
+        }
+        throw $e;
+    }
+}
+
+function criarProcesso(PDO $pdo): void
+{
+    $d = validarDadosProcesso(lerCorpoJson());
 
     $agora = new DateTime();
     $ultimaAtualizacao = $agora->format('d/m/Y') . ', ' . $agora->format('H:i');
@@ -87,7 +118,7 @@ function criarProcesso(PDO $pdo): void
         (numero, cliente, cpf_cnpj, area, vara, advogado, data_abertura, situacao, ultima_atualizacao)
         VALUES (:numero, :cliente, :cpf, :area, :vara, :advogado, :data, :situacao, :ultima)');
 
-    $stmt->execute([
+    executarProcesso($stmt, [
         'numero'   => $d['numero'],
         'cliente'  => $d['cliente'],
         'cpf'      => $d['cpf'],
@@ -120,13 +151,7 @@ function atualizarProcesso(PDO $pdo, int $id): void
         respostaJson(['sucesso' => false, 'mensagem' => 'ID inválido.'], 400);
     }
 
-    $d = lerCorpoJson();
-    $campos = ['numero', 'cliente', 'cpf', 'area', 'vara', 'advogado', 'dataAbertura', 'situacao'];
-    foreach ($campos as $campo) {
-        if (empty($d[$campo])) {
-            respostaJson(['sucesso' => false, 'mensagem' => 'Preencha todos os campos obrigatórios.'], 400);
-        }
-    }
+    $d = validarDadosProcesso(lerCorpoJson());
 
     $agora = new DateTime();
     $ultimaAtualizacao = $agora->format('d/m/Y') . ', ' . $agora->format('H:i');
@@ -137,7 +162,7 @@ function atualizarProcesso(PDO $pdo, int $id): void
         situacao = :situacao, ultima_atualizacao = :ultima
         WHERE id = :id');
 
-    $stmt->execute([
+    executarProcesso($stmt, [
         'numero'   => $d['numero'],
         'cliente'  => $d['cliente'],
         'cpf'      => $d['cpf'],
@@ -150,8 +175,13 @@ function atualizarProcesso(PDO $pdo, int $id): void
         'id'       => $id,
     ]);
 
+    // rowCount() é 0 também quando nada mudou; por isso confirma a existência
     if ($stmt->rowCount() === 0) {
-        respostaJson(['sucesso' => false, 'mensagem' => 'Processo não encontrado.'], 404);
+        $existe = $pdo->prepare('SELECT COUNT(*) FROM processos WHERE id = :id');
+        $existe->execute(['id' => $id]);
+        if ((int) $existe->fetchColumn() === 0) {
+            respostaJson(['sucesso' => false, 'mensagem' => 'Processo não encontrado.'], 404);
+        }
     }
 
     respostaJson(['sucesso' => true, 'mensagem' => 'Processo atualizado com sucesso!']);
@@ -163,8 +193,16 @@ function excluirProcesso(PDO $pdo, int $id): void
         respostaJson(['sucesso' => false, 'mensagem' => 'ID inválido.'], 400);
     }
 
+    $arquivos = $pdo->prepare('SELECT arquivo_path FROM documentos_processo WHERE processo_id = :id');
+    $arquivos->execute(['id' => $id]);
+    $caminhos = $arquivos->fetchAll(PDO::FETCH_COLUMN);
+
     $stmt = $pdo->prepare('DELETE FROM processos WHERE id = :id');
     $stmt->execute(['id' => $id]);
+
+    foreach ($caminhos as $caminho) {
+        apagarArquivoUpload($caminho);
+    }
 
     if ($stmt->rowCount() === 0) {
         respostaJson(['sucesso' => false, 'mensagem' => 'Processo não encontrado.'], 404);

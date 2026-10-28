@@ -57,22 +57,11 @@ function criarDocumento(PDO $pdo, string $pastaUploads): void
     if ($nome === '' || $tipo === '') {
         respostaJson(['sucesso' => false, 'mensagem' => 'Preencha os campos obrigatórios (Nome e Tipo).'], 400);
     }
-    if (empty($_FILES['arquivo'])) {
-        respostaJson(['sucesso' => false, 'mensagem' => 'Anexe um arquivo antes de salvar.'], 400);
+    if (mb_strlen($nome) > 200 || mb_strlen($tipo) > 40 || mb_strlen($relacionado) > 40) {
+        respostaJson(['sucesso' => false, 'mensagem' => 'Algum campo excede o tamanho permitido.'], 400);
     }
 
-    if (!is_dir($pastaUploads)) {
-        mkdir($pastaUploads, 0755, true);
-    }
-
-    $arquivo = $_FILES['arquivo'];
-    $nomeOriginal = basename($arquivo['name']);
-    $nomeArmazenado = uniqid('doc_', true) . '_' . preg_replace('/[^A-Za-z0-9._-]/', '_', $nomeOriginal);
-    $destino = $pastaUploads . $nomeArmazenado;
-
-    if (!move_uploaded_file($arquivo['tmp_name'], $destino)) {
-        respostaJson(['sucesso' => false, 'mensagem' => 'Falha ao salvar o arquivo no servidor.'], 500);
-    }
+    [$nomeOriginal, $nomeArmazenado] = salvarUpload('arquivo', $pastaUploads);
 
     $numeroProcesso = gerarNumeroProcesso($pdo);
 
@@ -108,15 +97,14 @@ function excluirDocumento(PDO $pdo, int $id): void
     $stmt->execute(['id' => $id]);
     $doc = $stmt->fetch();
 
+    if (!$doc) {
+        respostaJson(['sucesso' => false, 'mensagem' => 'Documento não encontrado.'], 404);
+    }
+
     $del = $pdo->prepare('DELETE FROM documentos WHERE id = :id');
     $del->execute(['id' => $id]);
 
-    if ($doc && !empty($doc['arquivo_path'])) {
-        $caminho = __DIR__ . '/../' . $doc['arquivo_path'];
-        if (file_exists($caminho)) {
-            unlink($caminho);
-        }
-    }
+    apagarArquivoUpload($doc['arquivo_path']);
 
     respostaJson(['sucesso' => true, 'mensagem' => 'Documento excluído.']);
 }
@@ -131,14 +119,5 @@ function baixarDocumento(PDO $pdo, int $id): void
         respostaJson(['sucesso' => false, 'mensagem' => 'Documento não encontrado.'], 404);
     }
 
-    $caminhoCompleto = __DIR__ . '/../' . $doc['arquivo_path'];
-    if (!file_exists($caminhoCompleto)) {
-        respostaJson(['sucesso' => false, 'mensagem' => 'Arquivo não encontrado no servidor.'], 404);
-    }
-
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename="' . $doc['arquivo_nome'] . '"');
-    header('Content-Length: ' . filesize($caminhoCompleto));
-    readfile($caminhoCompleto);
-    exit;
+    enviarDownload($doc['arquivo_path'], $doc['arquivo_nome']);
 }

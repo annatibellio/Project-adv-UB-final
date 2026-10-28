@@ -80,17 +80,17 @@ INSERT INTO `documentos` (`nome`, `tipo`, `processo_numero`, `processo_relaciona
 -- AUDIÊNCIAS
 -- ------------------------------------------------------------
 INSERT INTO `audiencias` (`data_hora`, `processo_numero`, `processo_desc`, `parte_adversa`, `vara`, `grau`, `tipo`, `status`) VALUES
-('2026-05-27 09:00:00', '0001234-56.2024.8.26.0000', 'Ação de Cobrança',        'Universidade Brasil',              '3ª Vara Cível',       '1º Grau', 'Audiência de Conciliação', 'Agendada'),
-('2026-05-28 14:00:00', '0012345-67.2024.8.26.0000', 'Ação Trabalhista',        'Ricardo Da Silva Alves',           '2ª Vara do Trabalho', '1º Grau', 'Instrução e Julgamento',   'Confirmada'),
-('2026-06-03 10:30:00', '0023456-78.2024.8.26.0000', 'Ação de Alimentos',       'Edson Company Colalto Junior',     '2ª Vara de Família',  '1º Grau', 'Conciliação',              'Realizada'),
-('2026-06-10 09:30:00', '0034567-89.2024.8.26.0000', 'Indenização por Danos',   'José Maria da Silva',              '4ª Vara Cível',       '1º Grau', 'Instrução e Julgamento',   'Agendada'),
-('2026-06-12 16:00:00', '0045678-90.2024.8.26.0000', 'Revisional de Contrato',  'Thiago Duarte de Oliveira',        '7ª Vara Cível',       '1º Grau', 'Conciliação',              'Cancelada');
+(CONCAT(CURDATE(), ' 09:00:00'), '0001234-56.2024.8.26.0000', 'Ação de Cobrança',        'Universidade Brasil',              '3ª Vara Cível',       '1º Grau', 'Audiência de Conciliação', 'Agendada'),
+(CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY), ' 14:00:00'), '0012345-67.2024.8.26.0000', 'Ação Trabalhista',        'Ricardo Da Silva Alves',           '2ª Vara do Trabalho', '1º Grau', 'Instrução e Julgamento',   'Confirmada'),
+(CONCAT(DATE_SUB(CURDATE(), INTERVAL 5 DAY), ' 10:30:00'), '0023456-78.2024.8.26.0000', 'Ação de Alimentos',       'Edson Company Colalto Junior',     '2ª Vara de Família',  '1º Grau', 'Conciliação',              'Realizada'),
+(CONCAT(DATE_ADD(CURDATE(), INTERVAL 6 DAY), ' 09:30:00'), '0034567-89.2024.8.26.0000', 'Indenização por Danos',   'José Maria da Silva',              '4ª Vara Cível',       '1º Grau', 'Instrução e Julgamento',   'Agendada'),
+(CONCAT(DATE_ADD(CURDATE(), INTERVAL 8 DAY), ' 16:00:00'), '0045678-90.2024.8.26.0000', 'Revisional de Contrato',  'Thiago Duarte de Oliveira',        '7ª Vara Cível',       '1º Grau', 'Conciliação',              'Cancelada');
 
 -- ------------------------------------------------------------
 -- COMPROMISSOS DA AGENDA
 -- ------------------------------------------------------------
 INSERT INTO `compromissos` (`titulo`, `data`, `hora`, `tipo`) VALUES
-('Prazo: Contestação',           '2026-05-08', NULL, 'Prazo Processual'),
-('Audiência: Proc. 0023...',     '2026-05-15', NULL, 'Audiência'),
-('Prazo: Manifestação',          '2026-05-14', NULL, 'Prazo Processual'),
-('Prazo: Recurso',               '2026-05-09', NULL, 'Prazo Processual');
+('Prazo: Contestação',           DATE_ADD(CURDATE(), INTERVAL 2 DAY), NULL, 'Prazo Processual'),
+('Audiência: Proc. 0023...',     DATE_ADD(CURDATE(), INTERVAL 7 DAY), NULL, 'Audiência'),
+('Prazo: Manifestação',          DATE_ADD(CURDATE(), INTERVAL 5 DAY), NULL, 'Prazo Processual'),
+('Prazo: Recurso',               DATE_ADD(CURDATE(), INTERVAL 3 DAY), NULL, 'Prazo Processual');

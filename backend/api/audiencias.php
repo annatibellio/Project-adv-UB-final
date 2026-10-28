@@ -18,6 +18,8 @@ $pdo = getConexao();
 
 $metodo = $_SERVER['REQUEST_METHOD'];
 
+const STATUS_AUDIENCIA = ['Agendada', 'Confirmada', 'Realizada', 'Cancelada'];
+
 switch ($metodo) {
     case 'GET':
         listarAudiencias($pdo);
@@ -34,6 +36,9 @@ switch ($metodo) {
     case 'DELETE':
         $stmt = $pdo->prepare('DELETE FROM audiencias WHERE id = :id');
         $stmt->execute(['id' => (int) ($_GET['id'] ?? 0)]);
+        if ($stmt->rowCount() === 0) {
+            respostaJson(['sucesso' => false, 'mensagem' => 'Audiência não encontrada.'], 404);
+        }
         respostaJson(['sucesso' => true, 'mensagem' => 'Audiência excluída.']);
         break;
 
@@ -81,6 +86,14 @@ function criarAudiencia(PDO $pdo): void
         }
     }
 
+    if (!dataValida($d['data']) || !horaValida($d['hora'])) {
+        respostaJson(['sucesso' => false, 'mensagem' => 'Data ou hora inválida.'], 400);
+    }
+    $status = $d['status'] ?? 'Agendada';
+    if (!in_array($status, STATUS_AUDIENCIA, true)) {
+        respostaJson(['sucesso' => false, 'mensagem' => 'Status inválido.'], 400);
+    }
+
     $stmt = $pdo->prepare('INSERT INTO audiencias
         (data_hora, processo_numero, processo_desc, parte_adversa, vara, grau, tipo, status)
         VALUES (:data_hora, :numero, :desc, :parte, :vara, :grau, :tipo, :status)');
@@ -93,7 +106,7 @@ function criarAudiencia(PDO $pdo): void
         'vara'      => $d['vara'],
         'grau'      => $d['grau'] ?? '1º Grau',
         'tipo'      => $d['tipo'],
-        'status'    => $d['status'] ?? 'Agendada',
+        'status'    => $status,
     ]);
 
     respostaJson(['sucesso' => true, 'mensagem' => 'Audiência cadastrada com sucesso!', 'id' => (int) $pdo->lastInsertId()], 201);
@@ -110,6 +123,9 @@ function atualizarAudiencia(PDO $pdo, int $id): void
     $params = ['id' => $id];
 
     if (isset($d['status'])) {
+        if (!in_array($d['status'], STATUS_AUDIENCIA, true)) {
+            respostaJson(['sucesso' => false, 'mensagem' => 'Status inválido.'], 400);
+        }
         $campos[] = 'status = :status';
         $params['status'] = $d['status'];
     }
@@ -122,6 +138,9 @@ function atualizarAudiencia(PDO $pdo, int $id): void
         $params['parte'] = $d['parteAdversa'];
     }
     if (isset($d['data']) && isset($d['hora'])) {
+        if (!dataValida($d['data']) || !horaValida($d['hora'])) {
+            respostaJson(['sucesso' => false, 'mensagem' => 'Data ou hora inválida.'], 400);
+        }
         $campos[] = 'data_hora = :data_hora';
         $params['data_hora'] = $d['data'] . ' ' . $d['hora'] . ':00';
     }
@@ -133,6 +152,12 @@ function atualizarAudiencia(PDO $pdo, int $id): void
     $sql = 'UPDATE audiencias SET ' . implode(', ', $campos) . ' WHERE id = :id';
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+
+    $existe = $pdo->prepare('SELECT COUNT(*) FROM audiencias WHERE id = :id');
+    $existe->execute(['id' => $id]);
+    if ((int) $existe->fetchColumn() === 0) {
+        respostaJson(['sucesso' => false, 'mensagem' => 'Audiência não encontrada.'], 404);
+    }
 
     respostaJson(['sucesso' => true, 'mensagem' => 'Audiência atualizada com sucesso!']);
 }

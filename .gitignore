@@ -1,0 +1,33 @@
+# Segredos / configuração local
+backend/config/config.local.php
+.env
+.env.*
+
+# Uploads de usuários (as pastas são mantidas pelos .gitkeep)
+backend/uploads/documentos/*
+backend/uploads/processos/*
+!backend/uploads/documentos/.gitkeep
+!backend/uploads/processos/.gitkeep
+!backend/uploads/.htaccess
+
+# Dependências e caches
+node_modules/
+vendor/
+*.log
+npm-debug.log*
+.cache/
+.phpunit.result.cache
+
+# Sistema operacional / editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*~
+
+# Temporários e backups
+*.tmp
+*.bak
+*.zip
